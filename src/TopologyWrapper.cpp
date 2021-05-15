@@ -1,4 +1,4 @@
-#include "TopologyWrapper.h";
+#include "TopologyWrapper.h"
 
 
 #include <fstream>
@@ -6,7 +6,7 @@
 #include "plog/Log.h"
 #include <nlohmann/json.hpp>
 
-//#include "Utility.h"
+#include "Utility.h"
 
 using json = nlohmann::json;
 
@@ -73,73 +73,13 @@ TopologyWrapper::TopologyWrapper(const sf::Vector2f &windowSize,
     :
         m_defenderActions(defenderActions)
 {
-    if (!m_netWindow.init(windowSize, fileName, nodeWidth)) {
+    if (!m_netWindow.init(windowSize, fileName, nodeWidth) ||
+            !init(windowSize, fileName, defenderActions, nodeWidth)) {
         /* Could handle or prompt another file name */
         PLOGF << "Bad file, exiting";
         exit(1);
     }
     
-    std::ifstream i(fileName);
-    json j;
-    i >> j;
-    
-    /* Load in the vulnerabilities present in the system over all links */
-    PLOGI << "Vulnerabilities:";
-    json sysVulnerabilities = j["systemVulnerabilities"];
-    for (json::const_iterator it = sysVulnerabilities.begin();
-            it != sysVulnerabilities.end(); it++) {
-        PLOGI << " ID: " << (*it)["cveID"];
-        Vulnerability &vul = m_vulnerabilities[(*it)["cveID"]];
-        vul.cveID = (*it)["cveID"];
-        vul.cweName = (*it)["cweName"];
-        vul.cvss = (*it)["cvss"];
-    }
-    
-    /* Load in all the nodes, and each outgoing link, along with the
-     * vulnerability instances on these links */
-    PLOGI << "Nodes:";
-    json nodes = j["nodes"];
-    for (json::const_iterator n = nodes.begin(); n != nodes.end(); n++) {
-        /* Create the node based on the saved object */
-        int nodeID = (*n)["id"];
-        Node &node = m_nodes[nodeID];
-        node.id = nodeID;
-        /* Need to add info for each node */
-        m_netWindow.m_nettop->setNodeInfoTitle(nodeID,
-                "Node " + std::to_string(nodeID));
-        ///////////////
-        PLOGI << "  Links:";
-        json links = (*n)["links"];
-        for (json::const_iterator li = links.begin(); li != links.end();
-                li++) {
-            int otherNodeID = (*li)["otherNodeID"];
-            PLOGI << "   ID: " << otherNodeID;
-            node.m_links.insert(otherNodeID);
-            Link &link = m_links[{nodeID, otherNodeID}];
-            link.m_endIds = {nodeID, otherNodeID};
-            m_netWindow.m_nettop->setLinkInfoTitle(nodeID, otherNodeID,
-                    "Link " + std::to_string(nodeID) + "->" +
-                    std::to_string(otherNodeID));
-            
-            PLOGI << "   vulnerabilities:";
-            m_netWindow.m_nettop->setLinkInfoParameter(nodeID, otherNodeID,
-                    "Vulnerabilities", "");
-            json vulnerabilities = (*li)["vulnerabilities"];
-            for (json::const_iterator v = vulnerabilities.begin();
-                    v != vulnerabilities.end(); v++) {
-                std::string cveID = (*v)["cveID"];
-                PLOGI << "    cveID: \"" << cveID << "\"";
-                link.m_vulnerabilities.emplace_back(m_vulnerabilities[cveID]);
-                Link::VulInstance &vul = link.m_vulnerabilities.back();
-                vul.m_state = (*v)["state"];
-            }
-            updateLinkInfo(link);
-        }
-        
-        m_netWindow.m_nettop->setNodeInfoParameter(nodeID, "Num Links",
-                std::to_string(node.m_links.size()));
-    }
-    m_netWindow.m_nettop->setNodeInfoParameter(0, "Test", "Testing");
     
     /*
     
@@ -166,6 +106,117 @@ TopologyWrapper::TopologyWrapper(const sf::Vector2f &windowSize,
     }
     return test;*/
 }
+
+TopologyWrapper* TopologyWrapper::init(const sf::Vector2f &windowSize,
+        const std::string &fileName,
+        const std::vector<std::string> &defenderActions, int nodeWidth)
+{
+    std::ifstream i(fileName);
+    json j;
+    i >> j;
+    
+    /* Load in the vulnerabilities present in the system over all links */
+    if (!j.contains("systemVulnerabilities")) {
+        PLOGE << "Does not contain required field \"systemVulnerabilities\"";
+        return nullptr;
+    }
+    PLOGI << "Vulnerabilities:";
+    json sysVulnerabilities = j["systemVulnerabilities"];
+    for (json::const_iterator v = sysVulnerabilities.begin();
+            v != sysVulnerabilities.end(); v++) {
+        if (!v->contains("cveID")) {
+            PLOGE << "Does not contain required field \"cveID\"";
+            return nullptr;
+        }
+        PLOGI << " CVE ID: " << (*v)["cveID"];
+        Vulnerability &vul = m_vulnerabilities[(*v)["cveID"]];
+        vul.cveID = (*v)["cveID"];
+        vul.cweName = "";
+        if (v->contains("cweName"))
+            vul.cweName = (*v)["cweName"];
+        
+        vul.cvss = -1;
+        if (v->contains("cvss"))
+            vul.cvss = (*v)["cvss"];
+        
+        vul.base = -1;
+        if (v->contains("base"))
+            vul.base = (*v)["base"];
+        
+        vul.impact = -1;
+        if (v->contains("impact"))
+            vul.impact = (*v)["impact"];
+        
+        vul.exploitability = -1;
+        if (v->contains("exploitability"))
+            vul.exploitability = (*v)["exploitability"];
+    }
+    
+    /* Load in all the nodes, and each outgoing link, along with the
+     * vulnerability instances on these links */
+    if (!j.contains("nodes")) {
+        PLOGE << "Contains no nodes";
+        return nullptr;
+    }
+    PLOGI << "Nodes:";
+    json nodes = j["nodes"];
+    for (json::const_iterator n = nodes.begin(); n != nodes.end(); n++) {
+        /* Create the node based on the saved object */
+        int nodeID = (*n)["id"];
+        Node &node = m_nodes[nodeID];
+        node.id = nodeID;
+        /* Need to add info for each node */
+        m_netWindow.m_nettop->setNodeInfoTitle(nodeID,
+                "Node " + std::to_string(nodeID));
+        ///////////////
+        if (!n->contains("links"))
+            continue;
+        PLOGI << "  Links:";
+        json links = (*n)["links"];
+        for (json::const_iterator li = links.begin(); li != links.end();
+                li++) {
+            int otherNodeID = (*li)["otherNodeID"];
+            PLOGI << "   ID: " << otherNodeID;
+            node.m_links.insert(otherNodeID);
+            Link &link = m_links[{nodeID, otherNodeID}];
+            link.m_endIds = {nodeID, otherNodeID};
+            m_netWindow.m_nettop->setLinkInfoTitle(nodeID, otherNodeID,
+                    "Link " + std::to_string(nodeID) + "->" +
+                    std::to_string(otherNodeID));
+            
+            m_netWindow.m_nettop->setLinkInfoParameter(nodeID, otherNodeID,
+                    "Vulnerabilities", "");
+            if (li->contains("vulnerabilities")) {
+                json vulnerabilities = (*li)["vulnerabilities"];
+                PLOGI << "   Vulnerabilities:";
+                for (json::const_iterator v = vulnerabilities.begin();
+                        v != vulnerabilities.end(); v++) {
+                    if (!(v->contains("cveID"))) {
+                        PLOGE << "Vulnerability on link " << link.m_endIds << " does not contain required field \"cveID\"";
+                        return nullptr;
+                    }
+                    std::string cveID = (*v)["cveID"];
+                    PLOGI << "    cveID: \"" << cveID << "\"";
+                    link.m_vulnerabilities.emplace_back(m_vulnerabilities[cveID]);
+                    Link::VulInstance &vul = link.m_vulnerabilities.back();
+
+                    if (v->contains("state"))
+                        vul.m_state = (*v)["state"];
+                    else
+                        vul.m_state = vulnerable;
+                }
+            }
+            updateLinkInfo(link);
+        }
+        
+        m_netWindow.m_nettop->setNodeInfoParameter(nodeID, "Num Links",
+                std::to_string(node.m_links.size()));
+    }
+    m_netWindow.m_nettop->setNodeInfoParameter(0, "Test", "Testing");
+
+    return this;
+}
+
 void TopologyWrapper::update(sf::Event *event, const sf::Vector2f &windowSize,
         bool &clickedOn)
 {

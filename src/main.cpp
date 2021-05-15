@@ -151,7 +151,7 @@ int main(int argc, char **argv)
     plog::init(plog::info, &debugConsole);
     
     
-    MDPGUIConfig config = MDPGUIConfig::LoadConfig(RESOURCE("testConfig.json"));
+    MDPGUIConfig config = MDPGUIConfig::LoadConfig(RESOURCE("SimulationConfig.json"));
     
     using namespace std::chrono;
     
@@ -436,6 +436,7 @@ int main(int argc, char **argv)
     sf::RenderWindow window(sf::VideoMode(width, height), "MDP Policy");
     sf::Vector2f windowSize(window.getSize());
     
+
     TopologyWrapper mdpWindow(windowSize, config.networkFile, std::vector<std::string>({"patch"}));
 
     int startNodeId = 9;

@@ -19,6 +19,7 @@ add_executable("${PROJECT_NAME}" ${MDPGUI_FILES})
 
 target_include_directories("${PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_SOURCE_DIR}/GraphicsTest/include" "/home/kurt/Desktop/madp/include/madp")
 target_link_libraries("${PROJECT_NAME}" GraphicsTest)
+target_compile_options(GraphicsTest PRIVATE -DNDEBUG)
 
 set (SFML_DIR "/usr/lib/x86_64-linux-gnu/cmake/SFML")
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
@@ -27,6 +28,7 @@ target_link_libraries("${PROJECT_NAME}" sfml-graphics sfml-window sfml-system)
 target_link_libraries("${PROJECT_NAME}" "/home/kurt/Desktop/madp/lib/libMADP.a")
 
 target_compile_options("${PROJECT_NAME}" PRIVATE -Wall)
+target_compile_options("${PROJECT_NAME}" PRIVATE -DNDEBUG)
 
 ADD_CUSTOM_TARGET(res ALL COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/res ${CMAKE_CURRENT_BINARY_DIR}/res)
 

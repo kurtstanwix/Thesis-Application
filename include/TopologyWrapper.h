@@ -10,6 +10,10 @@ enum vulnerability_state
     patched = 2
 };
 
+#define MAX_CVSS_SCORE 10.0
+#define MAX_IMPACT_SCORE 6.0
+#define MAX_EXPLOITABILITY_SCORE 3.9
+
 class TopologyWrapper : public Renderable
 {
 public:
@@ -22,6 +26,10 @@ protected:
     std::map<std::string, Vulnerability> m_vulnerabilities;
     
     std::vector<std::string> m_defenderActions;
+
+    TopologyWrapper* init(const sf::Vector2f &windowSize,
+        const std::string &fileName,
+        const std::vector<std::string> &defenderActions, int nodeWidth);
 public:
     /* Classes for managing the state of the POMDP system */
     struct Node
@@ -57,6 +65,9 @@ public:
         std::string cveID;
         std::string cweName;
         float cvss;
+        float base;
+        float impact;
+        float exploitability;
     };
     
     NetworkWindow m_netWindow;

@@ -83,7 +83,7 @@ void PathNetwork::ConstructActions()
         //             ActionDiscrete ad_temp =   ActionDiscrete(actionI,name,descr);
         //             _m_actionVecs[agentIndex].push_back( ad_temp );
             std::stringstream ssName;
-            ssName << itt->m_vul.cweName << "(" << it->first.first << ", " << it->first.second << ")";
+            ssName << itt->m_vul.cveID << ", " << itt->m_vul.cweName << " (" << it->first.first << ", " << it->first.second << ")";
             AddAction(agentIndex,ssName.str(),descr);
         }
     }
@@ -496,8 +496,15 @@ void PathNetwork::FillTransitionModel()
                 if (vulInst->m_state == patched) {
                     // Can't take this action, so it ends up in same state and reward is highly penalised
                     SetTransitionProbability(s1, ja, s1, 1.0);
-                } else {
-                    SetTransitionProbability(s1, ja, s2, 0.5);
+                } else if (otherNode.id != node.id) {
+                    double p;
+                    if (vulInst->m_vul.exploitability == -1.0) {
+                        p = 0.5;
+                    } else {
+                        p = std::min(vulInst->m_vul.exploitability / MAX_EXPLOITABILITY_SCORE, 1.0);
+                    }
+                    SetTransitionProbability(s1, ja, s2, p);
+                    SetTransitionProbability(s1, ja, s1, 1.0 - p);
                 }
             }
 
@@ -715,14 +722,12 @@ void PathNetwork::FillRewardModel()
         std::pair<int, int> link = m_actionVulMapping[ja].second;
         std::string cveID = m_actionVulMapping[ja].first;
         TopologyWrapper::Link &actionLink = NetworkSimulator::getInstance().m_top->getLinks()[link];
-        bool patchedLink = false;
+        TopologyWrapper::Link::VulInstance *vul = nullptr;
         if (cveID != "do nothing") {
-            for (std::vector<TopologyWrapper::Link::VulInstance>::iterator it = actionLink.m_vulnerabilities.begin();
-                    it != actionLink.m_vulnerabilities.end(); ++it) {
-                if (it->m_vul.cveID == cveID) {
-                    if (it->m_state == patched) {
-                        patchedLink = true;
-                    }
+            for (std::vector<TopologyWrapper::Link::VulInstance>::iterator vi = actionLink.m_vulnerabilities.begin();
+                    vi != actionLink.m_vulnerabilities.end(); ++vi) {
+                if (vi->m_vul.cveID == cveID) {
+                    vul = &(*vi);
                     break;
                 }
             }
@@ -734,20 +739,26 @@ void PathNetwork::FillRewardModel()
                 if (node1.id == m_goalNode) {
                     SetReward(s1, ja, 0.0);
                 } else {
-                    SetReward(s1, ja, -20.0);
+                    SetReward(s1, ja, -100.0);
                 }
                 continue;
             }
-            if (link.first != node1.id || patchedLink) {
+            if (link.first != node1.id || vul->m_state == patched) {
                 SetReward(s1, ja, -10000.0);
                 continue;
             }
             for (Index s2 = 0; s2 < GetNrStates(); ++s2) {
                 TopologyWrapper::Node &node2 = NetworkSimulator::getInstance().m_top->getNodes()[m_stateNodeMapping[s2]];
-                if (node2.id == m_goalNode && node1.id != m_goalNode) {
-                    SetReward(s1, ja, s2, 1000.0);
+                double p;
+                if (vul->m_vul.impact == -1.0) {
+                    p = 0.5;
                 } else {
-                    SetReward(s1, ja, s2, -20.0);
+                    p = vul->m_vul.impact / MAX_IMPACT_SCORE;
+                }
+                if (node2.id == m_goalNode && node1.id != m_goalNode) {
+                    SetReward(s1, ja, s2, 1000.0 * p);
+                } else {
+                    SetReward(s1, ja, s2, -100.0 * (1.0 - p));
                 }
             }
 

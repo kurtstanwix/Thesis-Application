@@ -712,36 +712,57 @@
         {
             "cveID": "CVE-2017-5638",
             "cvss": 10.0,
+            "base": 10.0,
+            "impact": 6.0,
+            "exploitability": 3.9,
             "cweName": "Improper Input Validation"
         },
         {
             "cveID": "CVE-2017-11882",
             "cvss": 7.8,
+            "base": 7.8,
+            "impact": 5.9,
+            "exploitability": 1.8,
             "cweName": "Improper Restriction of Operations within the Bounds of a Memory Buffer"
         },
         {
             "cveID": "CVE-2018-4878",
             "cvss": 9.8,
+            "base": 9.8,
+            "impact": 5.9,
+            "exploitability": 3.9,
             "cweName": "Use After Free"
         },
         {
             "cveID": "CVE-2017-0143",
             "cvss": 8.1,
+            "base": 8.1,
+            "impact": 5.9,
+            "exploitability": 2.2,
             "cweName": "Improper Input Validation"
         },
         {
             "cveID": "CVE-2018-7600",
             "cvss": 9.8,
+            "base": 9.8,
+            "impact": 5.9,
+            "exploitability": 3.9,
             "cweName": "Improper Input Validation"
         },
         {
             "cveID": "CVE-2015-1641",
             "cvss": 9.3,
+            "base": 9.3,
+            "impact": 6.0,
+            "exploitability": 3.354,
             "cweName": "Resource Management Errors"
         },
         {
             "cveID": "CVE-2017-8759",
             "cvss": 7.8,
+            "base": 7.8,
+            "impact": 5.9,
+            "exploitability": 1.8,
             "cweName": "Improper Input Validation"
         }
     ]
