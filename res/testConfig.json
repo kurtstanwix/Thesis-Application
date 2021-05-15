@@ -1,0 +1,8 @@
+{
+    "test1": 5,
+    "backgroundColor": [0, 20, 30],
+    "clientColor": [1,2,3,50],
+    "serverColor": [1,2,3,4,5],
+    "databaseColor": [1],
+    "networkFile": "fixedGridNetwork.json"
+}

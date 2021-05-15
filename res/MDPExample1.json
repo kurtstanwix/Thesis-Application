@@ -1,0 +1,393 @@
+{
+    "layout": 2,
+    "nodes": [
+        {
+            "id": 0,
+            "links": [
+                {
+                    "otherNodeID": 4,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "down",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 1,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "right",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "links": [
+                {
+                    "otherNodeID": 5,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "down",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 0,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "left",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 2,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "right",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "links": [
+                {
+                    "otherNodeID": 6,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "down",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 1,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "left",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 3,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "right",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "links": [
+                {
+                    "otherNodeID": 7,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "down",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 2,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "left",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "links": [
+                {
+                    "otherNodeID": 0,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "up",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 8,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "down",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 5,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "right",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "links": [
+                {
+                    "otherNodeID": 1,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "up",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 9,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "down",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 4,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "left",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 6,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "right",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "links": [
+                {
+                    "otherNodeID": 2,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "up",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 10,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "down",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 5,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "left",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 7,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "right",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "links": [
+                {
+                    "otherNodeID": 3,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "up",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 11,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "down",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 6,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "left",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "links": [
+                {
+                    "otherNodeID": 4,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "up",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 9,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "right",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "links": [
+                {
+                    "otherNodeID": 5,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "up",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 8,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "left",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 10,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "right",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "links": [
+                {
+                    "otherNodeID": 6,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "up",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 9,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "left",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 11,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "right",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "links": [
+                {
+                    "otherNodeID": 7,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "up",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 10,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "left",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "systemVulnerabilities": [
+        {
+            "cveID": "up",
+            "cvss": 10,
+            "cweName": "Move Up"
+        },
+        {
+            "cveID": "down",
+            "cvss": 10,
+            "cweName": "Move Down"
+        },
+        {
+            "cveID": "left",
+            "cvss": 10,
+            "cweName": "Move Left"
+        },
+        {
+            "cveID": "right",
+            "cvss": 10,
+            "cweName": "Move Right"
+        }
+    ]
+}

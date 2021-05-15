@@ -1,0 +1,148 @@
+{
+    "layout": 2,
+    "nodes": [
+        {
+            "id": 0,
+            "links": [
+                {
+                    "otherNodeID": 1,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 2,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "links": [
+                {
+                    "otherNodeID": 4,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "links": [
+                {
+                    "otherNodeID": 3,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 4,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "links": [
+                {
+                    "otherNodeID": 5,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "links": [
+                {
+                    "otherNodeID": 5,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "links": [
+                {
+                    "otherNodeID": 6,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "links": []
+        }
+    ],
+    "systemVulnerabilities": [
+        {
+            "cveID": "CVE-2017-5638",
+            "cvss": 10.0,
+            "cweName": "Improper Input Validation"
+        },
+        {
+            "cveID": "CVE-2017-11882",
+            "cvss": 7.8,
+            "cweName": "Improper Restriction of Operations within the Bounds of a Memory Buffer"
+        },
+        {
+            "cveID": "CVE-2018-4878",
+            "cvss": 9.8,
+            "cweName": "Use After Free"
+        },
+        {
+            "cveID": "CVE-2017-0143",
+            "cvss": 8.1,
+            "cweName": "Improper Input Validation"
+        },
+        {
+            "cveID": "CVE-2018-7600",
+            "cvss": 9.8,
+            "cweName": "Improper Input Validation"
+        },
+        {
+            "cveID": "CVE-2015-1641",
+            "cvss": 9.3,
+            "cweName": "Resource Management Errors"
+        },
+        {
+            "cveID": "CVE-2017-8759",
+            "cvss": 7.8,
+            "cweName": "Improper Input Validation"
+        }
+    ]
+}
