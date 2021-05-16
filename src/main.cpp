@@ -148,16 +148,21 @@ int main(int argc, char **argv)
     cout << std::string( result, (count > 0) ? count : 0 ) << endl;
     
     static plog::ConsoleAppender<plog::TxtFormatter> debugConsole;
-    plog::init(plog::info, &debugConsole);
+    plog::init(plog::verbose, &debugConsole);
     
     
     MDPGUIConfig config = MDPGUIConfig::LoadConfig(RESOURCE("SimulationConfig.json"));
+    NetworkSimulator::getInstance().m_config = config;
+
+    plog::get()->setMaxSeverity(config.logLevel);
     
     using namespace std::chrono;
     
     int squareWidth = 100;
     int width = config.width;
     int height = config.height;
+
+    srand(time(0));
     
     
     /*
@@ -437,15 +442,16 @@ int main(int argc, char **argv)
     sf::Vector2f windowSize(window.getSize());
     
 
-    TopologyWrapper mdpWindow(windowSize, config.networkFile, std::vector<std::string>({"patch"}));
+    TopologyWrapper mdpWindow(windowSize, config, std::vector<std::string>({"patch"}));
 
-    int startNodeId = 9;
-    int goalNodeId = 3;
-    NetworkSimulator::getInstance().m_startNode = startNodeId;
-    NetworkSimulator::getInstance().m_goalNode = goalNodeId;
+    NetworkSimulator::getInstance().m_startNode = config.startNodeId;
+    NetworkSimulator::getInstance().m_goalNode = config.goalNodeId;
     NetworkSimulator::getInstance().m_top = &mdpWindow;
 
-    PathNetwork attacker = PathNetwork(startNodeId, goalNodeId, windowSize);
+    NetworkSimulator::getInstance().m_top->m_netWindow.m_nettop->setNodeColor(config.startNodeId, config.attackerMoveColor);
+    NetworkSimulator::getInstance().m_top->m_netWindow.m_nettop->setNodeColor(config.goalNodeId, config.goalColor);
+
+    PathNetwork attacker = PathNetwork(config.startNodeId, config.goalNodeId, windowSize);
     NetworkSimulator::getInstance().m_attacker = &attacker;
 
     SimulationUnit *defender;
@@ -591,7 +597,6 @@ int main(int argc, char **argv)
     }
     path.ShowPolicy();*/
     
-    srand(time(0));
     /*
     std::list<std::pair<std::string, std::pair<int, int>>> attackerPath = path.GetPath();
 
@@ -646,7 +651,7 @@ int main(int argc, char **argv)
             oldTime = system_clock::now();
         }
         
-        window.clear();
+        window.clear(config.backgroundColor);
         mdpWindow.render(window, windowSize);
         window.display();
     }

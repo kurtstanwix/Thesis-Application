@@ -19,9 +19,9 @@ std::string TopologyWrapper::Link::VulInstance::getString() const
     if (m_highlighted)
         ss << "`";
     ss << m_vul.cveID;
-    ss << "\n CVSS: ";
+    ss << "\n   CVSS: ";
     ss << m_vul.cvss;
-    ss << "\n State: ";
+    ss << "\n   State: ";
     switch (m_state) {
         case patched:
             ss << "Patched";
@@ -68,13 +68,13 @@ void TopologyWrapper::updateLinkInfo(const Link &link)
 
 
 TopologyWrapper::TopologyWrapper(const sf::Vector2f &windowSize,
-        const std::string &fileName,
+        const MDPGUIConfig &config,
         const std::vector<std::string> &defenderActions, int nodeWidth)
     :
         m_defenderActions(defenderActions)
 {
-    if (!m_netWindow.init(windowSize, fileName, nodeWidth) ||
-            !init(windowSize, fileName, defenderActions, nodeWidth)) {
+    if (!m_netWindow.init(windowSize, config.networkFile, nodeWidth) ||
+            !init(windowSize, config, defenderActions, nodeWidth)) {
         /* Could handle or prompt another file name */
         PLOGF << "Bad file, exiting";
         exit(1);
@@ -108,10 +108,10 @@ TopologyWrapper::TopologyWrapper(const sf::Vector2f &windowSize,
 }
 
 TopologyWrapper* TopologyWrapper::init(const sf::Vector2f &windowSize,
-        const std::string &fileName,
+        const MDPGUIConfig &config,
         const std::vector<std::string> &defenderActions, int nodeWidth)
 {
-    std::ifstream i(fileName);
+    std::ifstream i(config.networkFile);
     json j;
     i >> j;
     
@@ -213,6 +213,23 @@ TopologyWrapper* TopologyWrapper::init(const sf::Vector2f &windowSize,
                 std::to_string(node.m_links.size()));
     }
     m_netWindow.m_nettop->setNodeInfoParameter(0, "Test", "Testing");
+
+    // Set up network colouring from config
+    std::vector<int> nodeIds = m_netWindow.m_nettop->getNodeIds();
+    for (std::vector<int>::iterator id1 = nodeIds.begin(); id1 != nodeIds.end(); ++id1) {
+        m_netWindow.m_nettop->setNodeColor(*id1, config.nodeColor);
+        m_netWindow.m_nettop->setNodeInfoColor(*id1,
+                sf::Color(rand() % 255, rand() % 255, rand() % 255));
+        std::vector<int> linkIds;
+        m_netWindow.m_nettop->getNodesOut(*id1, linkIds);
+        for (std::vector<int>::iterator id2 = linkIds.begin(); id2 != linkIds.end(); ++id2) {
+            m_netWindow.m_nettop->setLinkColor(*id1, *id2, config.linkColor);
+            m_netWindow.m_nettop->setLinkInfoColor(*id1, *id2,
+                    sf::Color(rand() % 255, rand() % 255, rand() % 255));
+        }
+    }
+
+    m_netWindow.m_nettop->setColor(config.backgroundColor);
 
     return this;
 }

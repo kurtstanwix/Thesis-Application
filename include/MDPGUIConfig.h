@@ -1,6 +1,7 @@
 #ifndef _MDPGUICONFIG_H
 #define _MDPGUICONFIG_H 1
 
+#include "plog/Log.h"
 #include "SFML/Graphics.hpp"
 
 /*union ConfigProperty
@@ -20,13 +21,20 @@ private:
     
 public:
     sf::Color backgroundColor;
-    sf::Color serverColor;
-    sf::Color databaseColor;
-    sf::Color clientColor;
+    sf::Color nodeColor;
+    sf::Color linkColor;
+    sf::Color linkNewPathColor;
+    sf::Color linkOldPathColor;
+    sf::Color attackerMoveColor;
+    sf::Color defenderMoveColor;
+    sf::Color goalColor;
     int width;
     int height;
     std::string networkFile;
+    int startNodeId;
+    int goalNodeId;
     DefenderPolicy defenderPolicy;
+    plog::Severity logLevel;
     
     MDPGUIConfig();
     

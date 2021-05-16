@@ -4,20 +4,27 @@
 
 #include "Utility.h"
 
-#include "plog/Log.h"
 #include <nlohmann/json.hpp>
 
 #define DEFAULT_WIDTH 1200
 #define DEFAULT_HEIGHT 1200
 
 #define DEFAULT_BACKGROUND_COLOR sf::Color::Black
-#define DEFAULT_SERVER_COLOR sf::Color::Yellow
-#define DEFAULT_DATABASE_COLOR sf::Color(160, 0, 255)
-#define DEFAULT_CLIENT_COLOR sf::Color::Green
+#define DEFAULT_NODE_COLOR sf::Color::Yellow
+#define DEFAULT_LINK_COLOR sf::Color(160, 0, 255)
+#define DEFAULT_LINK_NEW_PATH_COLOR sf::Color::White
+#define DEFAULT_LINK_OLD_PATH_COLOR sf::Color(160, 160, 160)
+#define DEFAULT_ATTACKER_MOVE_COLOR sf::Color::Red
+#define DEFAULT_DEFENDER_MOVE_COLOR sf::Color::Green
+#define DEFAULT_GOAL_COLOR sf::Color::Green
 
 #define DEFAULT_NETWORK_FILE RESOURCE("MDPExample1.json")
+#define DEFAULT_START_NODE_ID 9
+#define DEFAULT_GOAL_NODE_ID 3
 
 #define DEFAULT_DEFENDER_POLICY goal
+
+#define DEFAULT_LOG_LEVEL plog::info
 
 using json = nlohmann::json;
 
@@ -36,11 +43,18 @@ MDPGUIConfig::MDPGUIConfig()
         width(DEFAULT_WIDTH),
         height(DEFAULT_HEIGHT),
         backgroundColor(DEFAULT_BACKGROUND_COLOR),
-        serverColor(DEFAULT_SERVER_COLOR),
-        databaseColor(DEFAULT_DATABASE_COLOR),
-        clientColor(DEFAULT_CLIENT_COLOR),
+        nodeColor(DEFAULT_NODE_COLOR),
+        linkColor(DEFAULT_LINK_COLOR),
+        linkNewPathColor(DEFAULT_LINK_NEW_PATH_COLOR),
+        linkOldPathColor(DEFAULT_LINK_OLD_PATH_COLOR),
+        attackerMoveColor(DEFAULT_ATTACKER_MOVE_COLOR),
+        defenderMoveColor(DEFAULT_DEFENDER_MOVE_COLOR),
+        goalColor(DEFAULT_GOAL_COLOR),
         networkFile(DEFAULT_NETWORK_FILE),
-        defenderPolicy(DEFAULT_DEFENDER_POLICY)
+        startNodeId(DEFAULT_START_NODE_ID),
+        goalNodeId(DEFAULT_GOAL_NODE_ID),
+        defenderPolicy(DEFAULT_DEFENDER_POLICY),
+        logLevel(DEFAULT_LOG_LEVEL)
 {}
 
 MDPGUIConfig MDPGUIConfig::LoadConfig()
@@ -80,31 +94,67 @@ MDPGUIConfig MDPGUIConfig::LoadConfig(const std::string &fileName)
         PLOGV << "No backgroundColor";
     }
     
-    if (j.contains("serverColor")) {
-        tempColor = colorFromJSON(j["serverColor"]);
+    if (j.contains("nodeColor")) {
+        tempColor = colorFromJSON(j["nodeColor"]);
         if (tempColor != sf::Color::Transparent)
-            result.serverColor = tempColor;
-        PLOGV << "Loaded serverColor=" << result.serverColor;
+            result.nodeColor = tempColor;
+        PLOGV << "Loaded nodeColor=" << result.nodeColor;
     } else {
-        PLOGV << "No serverColor";
+        PLOGV << "No nodeColor";
     }
     
-    if (j.contains("databaseColor")) {
-        tempColor = colorFromJSON(j["databaseColor"]);
+    if (j.contains("linkColor")) {
+        tempColor = colorFromJSON(j["linkColor"]);
         if (tempColor != sf::Color::Transparent)
-            result.databaseColor = tempColor;
-        PLOGV << "Loaded databaseColor=" << result.databaseColor;
+            result.linkColor = tempColor;
+        PLOGV << "Loaded linkColor=" << result.linkColor;
     } else {
-        PLOGV << "No databaseColor";
+        PLOGV << "No linkColor";
     }
     
-    if (j.contains("clientColor")) {
-        tempColor = colorFromJSON(j["clientColor"]);
+    if (j.contains("linkNewPathColor")) {
+        tempColor = colorFromJSON(j["linkNewPathColor"]);
         if (tempColor != sf::Color::Transparent)
-            result.clientColor = tempColor;
-        PLOGV << "Loaded clientColor=" << result.clientColor;
+            result.linkNewPathColor = tempColor;
+        PLOGV << "Loaded linkNewPathColor=" << result.linkNewPathColor;
     } else {
-        PLOGV << "No clientColor";
+        PLOGV << "No linkNewPathColor";
+    }
+    
+    if (j.contains("linkOldPathColor")) {
+        tempColor = colorFromJSON(j["linkOldPathColor"]);
+        if (tempColor != sf::Color::Transparent)
+            result.linkOldPathColor = tempColor;
+        PLOGV << "Loaded linkOldPathColor=" << result.linkOldPathColor;
+    } else {
+        PLOGV << "No linkOldPathColor";
+    }
+    
+    if (j.contains("attackerMoveColor")) {
+        tempColor = colorFromJSON(j["attackerMoveColor"]);
+        if (tempColor != sf::Color::Transparent)
+            result.attackerMoveColor = tempColor;
+        PLOGV << "Loaded attackerMoveColor=" << result.attackerMoveColor;
+    } else {
+        PLOGV << "No attackerMoveColor";
+    }
+    
+    if (j.contains("defenderMoveColor")) {
+        tempColor = colorFromJSON(j["defenderMoveColor"]);
+        if (tempColor != sf::Color::Transparent)
+            result.defenderMoveColor = tempColor;
+        PLOGV << "Loaded defenderMoveColor=" << result.defenderMoveColor;
+    } else {
+        PLOGV << "No defenderMoveColor";
+    }
+    
+    if (j.contains("goalColor")) {
+        tempColor = colorFromJSON(j["goalColor"]);
+        if (tempColor != sf::Color::Transparent)
+            result.goalColor = tempColor;
+        PLOGV << "Loaded goalColor=" << result.goalColor;
+    } else {
+        PLOGV << "No goalColor";
     }
     
     if (j.contains("networkFile")) {
@@ -114,11 +164,32 @@ MDPGUIConfig MDPGUIConfig::LoadConfig(const std::string &fileName)
         PLOGV << "No networkFile";
     }
     
+    if (j.contains("startNodeId")) {
+        result.startNodeId = j["startNodeId"];
+        PLOGV << "Loaded startNodeId=" << result.startNodeId;
+    } else {
+        PLOGV << "No startNodeId";
+    }
+    
+    if (j.contains("goalNodeId")) {
+        result.goalNodeId = j["goalNodeId"];
+        PLOGV << "Loaded goalNodeId=" << result.goalNodeId;
+    } else {
+        PLOGV << "No goalNodeId";
+    }
+    
     if (j.contains("defenderPolicy")) {
         result.defenderPolicy = j["defenderPolicy"];
         PLOGV << "Loaded defenderPolicy=" << result.defenderPolicy;
     } else {
         PLOGV << "No defenderPolicy";
+    }
+    
+    if (j.contains("logLevel")) {
+        result.logLevel = j["logLevel"];
+        PLOGV << "Loaded logLevel=" << result.logLevel;
+    } else {
+        PLOGV << "No logLevel";
     }
     
     /*

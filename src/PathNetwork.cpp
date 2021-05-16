@@ -25,9 +25,6 @@ PathNetwork::PathNetwork(int startNodeId, int goalNodeId, const sf::Vector2f &wi
         m_johI(INITIAL_JOHI)
 {
     SetNrAgents(m_nrAgents);
-
-    NetworkSimulator::getInstance().m_top->m_netWindow.m_nettop->setNodeColor(m_startNode, sf::Color::Red);
-    NetworkSimulator::getInstance().m_top->m_netWindow.m_nettop->setNodeColor(m_goalNode, sf::Color::Green);
     
     // Number of states (one per node position in this case)
     PLOGI << "Number of states: " << NetworkSimulator::getInstance().m_top->getNodes().size();
@@ -285,16 +282,6 @@ void PathNetwork::TakeAction()
 {
     if (m_bfs == nullptr) {
         PlanMDP();
-        for (std::list<std::pair<std::string, std::pair<int, int>>>::iterator it = 
-                NetworkSimulator::getInstance().m_currPath.begin();
-                it != NetworkSimulator::getInstance().m_currPath.end(); ++it) {
-            TopologyWrapper::Link &link = NetworkSimulator::getInstance().m_top->getLinks().at(it->second);
-            if (NetworkSimulator::getInstance().m_top->m_netWindow.m_nettop->getLinkColor(
-                    link.m_endIds.first, link.m_endIds.second) == sf::Color::Yellow) {
-                NetworkSimulator::getInstance().m_top->m_netWindow.m_nettop->setLinkColor(
-                        it->second.first, it->second.second, sf::Color::Blue);
-            }
-        }
         NetworkSimulator::getInstance().m_currPath = GetPath();
         if (NetworkSimulator::getInstance().m_currPath.empty()) {
             NetworkSimulator::getInstance().m_finished = true;
@@ -304,7 +291,7 @@ void PathNetwork::TakeAction()
     if (m_sim == nullptr) {
         CreateSimulator();
     }
-    std::list<std::pair<std::string, std::pair<int, int>>> &path = NetworkSimulator::getInstance().m_currPath;
+    std::list<SimAction> &path = NetworkSimulator::getInstance().m_currPath;
 
     Index jaI,sI,joI;
     double r,sumR=0;
@@ -341,48 +328,12 @@ void PathNetwork::TakeAction()
     PLOGI << "After state: " << sI;
     joI = SampleJointObservation(jaI, sI);
 
-    // Set the already travelled path colour
-    for (std::list<std::pair<SimAction, ActionResult>>::iterator it =
-            NetworkSimulator::getInstance().m_attackerActions.begin();
-            it != NetworkSimulator::getInstance().m_attackerActions.end(); ++it) {
-        if (it->second == fail) {
-            continue;
-        }
-        TopologyWrapper::Link &link = NetworkSimulator::getInstance().m_top->getLinks().at(it->first.second);
-        NetworkSimulator::getInstance().m_top->m_netWindow.m_nettop->setLinkColor(link.m_endIds.first,
-                link.m_endIds.second, sf::Color(125, 0, 0));
-        for (std::vector<TopologyWrapper::Link::VulInstance>::iterator itt = link.m_vulnerabilities.begin();
-                itt != link.m_vulnerabilities.end(); ++itt) {
-            if (itt->m_vul.cveID == it->first.first) {
-                itt->m_highlighted = false; // Only want the current move highlighted
-            }
-        }
-        NetworkSimulator::getInstance().m_top->updateLinkInfo(link);
-    }
-
     SimAction action = path.front();
     if (sI == path.front().second.second) {
         // Made a move
         NetworkSimulator::getInstance().m_attackerActions.emplace_back(action, success);
-        try {
-            TopologyWrapper::Link &link = NetworkSimulator::getInstance().m_top->getLinks().at(action.second);
-            NetworkSimulator::getInstance().m_top->m_netWindow.m_nettop->setLinkColor(link.m_endIds.first,
-                    link.m_endIds.second, sf::Color::Red);
-            for (std::vector<TopologyWrapper::Link::VulInstance>::iterator it = link.m_vulnerabilities.begin();
-                    it != link.m_vulnerabilities.end(); ++it) {
-                if (it->m_vul.cveID == path.front().first) {
-                    it->m_highlighted = true;
-                    it->m_state = vulnerability_state::compromised;
-                }
-            }
-            NetworkSimulator::getInstance().m_top->updateLinkInfo(link);
-            NetworkSimulator::getInstance().m_top->m_netWindow.m_nettop->setNodeColor(
-                    action.second.first, sf::Color(150, 0, 0));
-            NetworkSimulator::getInstance().m_top->m_netWindow.m_nettop->setNodeColor(
-                    action.second.second, sf::Color::Red);
-            PLOGI << "Attacker: Exploiting " << action.first << " on link " << action.second.first << "->" << action.second.second << ": SUCCESS";
-            path.pop_front();
-        } catch (const std::out_of_range &oor) {} // No element was found which should never happen
+        PLOGI << "Attacker: Exploiting " << action.first << " on link " << action.second.first << "->" << action.second.second << ": SUCCESS";
+        path.pop_front();
     } else {
         NetworkSimulator::getInstance().m_attackerActions.emplace_back(action, fail);
         PLOGI << "Defender: Exploiting " << action.first << " on link " << action.second.first << "->" << action.second.second << ": FAIL";

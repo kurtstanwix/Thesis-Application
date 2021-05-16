@@ -35,7 +35,7 @@ protected:
 public:
     
     MDPNetwork(const sf::Vector2f &windowSize,
-            const std::string &fileName,
+            const MDPGUIConfig &config,
             const std::vector<std::string> &defenderActions,
             int nodeWidth = 100);
 };

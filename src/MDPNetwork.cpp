@@ -9,10 +9,10 @@
 #include <sstream>
 
 MDPNetwork::MDPNetwork(const sf::Vector2f &windowSize,
-        const std::string &fileName,
+        const MDPGUIConfig &config,
         const std::vector<std::string> &defenderActions, int nodeWidth)
     :
-        TopologyWrapper(windowSize, fileName, defenderActions, nodeWidth),
+        TopologyWrapper(windowSize, config, defenderActions, nodeWidth),
         m_nrAgents(1),
         m_startNode(8)
 {

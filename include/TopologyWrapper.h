@@ -1,6 +1,7 @@
 #ifndef _TOPOLOGY_WRAPPER_H
 #define _TOPOLOGY_WRAPPER_H
 
+#include "MDPGUIConfig.h"
 #include "NetworkWindow.h"
 
 enum vulnerability_state
@@ -28,7 +29,7 @@ protected:
     std::vector<std::string> m_defenderActions;
 
     TopologyWrapper* init(const sf::Vector2f &windowSize,
-        const std::string &fileName,
+        const MDPGUIConfig &config,
         const std::vector<std::string> &defenderActions, int nodeWidth);
 public:
     /* Classes for managing the state of the POMDP system */
@@ -75,7 +76,7 @@ public:
     TopologyWrapper() = delete;
     
     TopologyWrapper(const sf::Vector2f &windowSize,
-            const std::string &fileName,
+            const MDPGUIConfig &config,
             const std::vector<std::string> &defenderActions,
             int nodeWidth = 100);
     

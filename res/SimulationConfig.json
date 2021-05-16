@@ -1,8 +1,14 @@
 {
-    "test1": 5,
-    "backgroundColor": [0, 20, 30],
-    "clientColor": [1,2,3,50],
-    "serverColor": [1,2,3,4,5],
-    "databaseColor": [1],
-    "networkFile": "fixedGridNetwork.json"
+    "backgroundColor": [30, 30, 30],
+    "nodeColor": [0, 30, 150],
+    "linkColor": [0, 100, 180],
+    "linkNewPathColor": [100, 100, 30],
+    "linkOldPathColor": [140, 0, 0],
+    "attackerMoveColor": [255, 0, 0],
+    "defenderMoveColor": [0, 255, 0],
+    "goalColor": [0, 255, 0],
+    "networkFile": "fixedGridNetwork.json",
+    "startNodeId": 8,
+    "goalNodeId": 3,
+    "logLevel": 4
 }
