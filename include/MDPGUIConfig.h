@@ -12,7 +12,8 @@
 enum DefenderPolicy {
     goal = 0,
     attack = 1,
-    exploiatbility = 2
+    exploitability = 2,
+    impact = 3
 };
 
 class MDPGUIConfig
@@ -35,6 +36,8 @@ public:
     int goalNodeId;
     DefenderPolicy defenderPolicy;
     plog::Severity logLevel;
+    bool GUI;
+    int numSimulations;
     
     MDPGUIConfig();
     

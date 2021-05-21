@@ -1,0 +1,499 @@
+{
+    "layout": 2,
+    "nodes": [
+        {
+            "id": 0,
+            "links": [
+                {
+                    "otherNodeID": 1,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-5367",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2018-4878",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-8759",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2015-1641",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 4,
+                    "vulnerabilities": null
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "links": [
+                {
+                    "otherNodeID": 0,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-8759",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 2,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-4878",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2018-8019",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-8759",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 5,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-0143",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-5638",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "links": [
+                {
+                    "otherNodeID": 1,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-0143",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-5638",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 3,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-4878",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2018-8019",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-8759",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 6,
+                    "vulnerabilities": null
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "links": [
+                {
+                    "otherNodeID": 2,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-4878",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-0143",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 7,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-0143",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "links": [
+                {
+                    "otherNodeID": 0,
+                    "vulnerabilities": null
+                },
+                {
+                    "otherNodeID": 5,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-7600",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2018-4878",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 8,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-8759",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "links": [
+                {
+                    "otherNodeID": 1,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-0143",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2018-4878",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 6,
+                    "vulnerabilities": null
+                },
+                {
+                    "otherNodeID": 9,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-4878",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2018-8019",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 4,
+                    "vulnerabilities": null
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "links": [
+                {
+                    "otherNodeID": 2,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-0143",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2018-4878",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2018-7600",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2015-1641",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 7,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-8019",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 10,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-7600",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2015-1641",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 5,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-8019",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-8759",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "links": [
+                {
+                    "otherNodeID": 3,
+                    "vulnerabilities": null
+                },
+                {
+                    "otherNodeID": 11,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-8759",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2015-1641",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-0143",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 6,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-8759",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "links": [
+                {
+                    "otherNodeID": 4,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-0143",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2018-4878",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 9,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-7600",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "links": [
+                {
+                    "otherNodeID": 5,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-7600",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-8759",
+                            "state": 0
+                        },
+                        {
+                            "cveID": "CVE-2017-11882",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 10,
+                    "vulnerabilities": null
+                },
+                {
+                    "otherNodeID": 8,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-7600",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "links": [
+                {
+                    "otherNodeID": 6,
+                    "vulnerabilities": null
+                },
+                {
+                    "otherNodeID": 11,
+                    "vulnerabilities": null
+                },
+                {
+                    "otherNodeID": 9,
+                    "vulnerabilities": null
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "links": [
+                {
+                    "otherNodeID": 7,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2018-4878",
+                            "state": 0
+                        }
+                    ]
+                },
+                {
+                    "otherNodeID": 10,
+                    "vulnerabilities": [
+                        {
+                            "cveID": "CVE-2017-0143",
+                            "state": 0
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "systemVulnerabilities": [
+        {
+            "base": 10.0,
+            "cveID": "CVE-2017-5638",
+            "cvss": 10.0,
+            "cweName": "Improper Input Validation",
+            "exploitability": 3.9,
+            "impact": 6.0
+        },
+        {
+            "base": 7.8,
+            "cveID": "CVE-2017-11882",
+            "cvss": 7.8,
+            "cweName": "Improper Restriction of Operations within the Bounds of a Memory Buffer",
+            "exploitability": 1.8,
+            "impact": 5.9
+        },
+        {
+            "base": 9.8,
+            "cveID": "CVE-2018-4878",
+            "cvss": 9.8,
+            "cweName": "Use After Free",
+            "exploitability": 3.9,
+            "impact": 5.9
+        },
+        {
+            "base": 8.1,
+            "cveID": "CVE-2017-0143",
+            "cvss": 8.1,
+            "cweName": "Improper Input Validation",
+            "exploitability": 2.2,
+            "impact": 5.9
+        },
+        {
+            "base": 9.8,
+            "cveID": "CVE-2018-7600",
+            "cvss": 9.8,
+            "cweName": "Improper Input Validation",
+            "exploitability": 3.9,
+            "impact": 5.9
+        },
+        {
+            "base": 9.3,
+            "cveID": "CVE-2015-1641",
+            "cvss": 9.3,
+            "cweName": "Resource Management Errors",
+            "exploitability": 3.354,
+            "impact": 6.0
+        },
+        {
+            "base": 7.8,
+            "cveID": "CVE-2017-8759",
+            "cvss": 7.8,
+            "cweName": "Improper Input Validation",
+            "exploitability": 1.8,
+            "impact": 5.9
+        },
+        {
+            "base": 6.7,
+            "cveID": "CVE-2018-8019",
+            "cvss": 6.7,
+            "cweName": "Improper Restriction of Operations within the Bounds of a Memory Buffer",
+            "exploitability": 0.7,
+            "impact": 6.0
+        },
+        {
+            "base": 7.1,
+            "cveID": "CVE-2017-5367",
+            "cvss": 7.1,
+            "cweName": "Improper Restriction of Operations within the Bounds of a Memory Buffer",
+            "exploitability": 1.2,
+            "impact": 5.9
+        }
+    ]
+}

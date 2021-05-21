@@ -28,11 +28,9 @@ protected:
     
     std::vector<std::string> m_defenderActions;
 
-    TopologyWrapper* init(const sf::Vector2f &windowSize,
-        const MDPGUIConfig &config,
-        const std::vector<std::string> &defenderActions, int nodeWidth);
+    bool init(const MDPGUIConfig &config);
 public:
-    /* Classes for managing the state of the POMDP system */
+    // Classes for managing the state of the POMDP system
     struct Node
     {
         int id;
@@ -80,6 +78,8 @@ public:
             const std::vector<std::string> &defenderActions,
             int nodeWidth = 100);
     
+    void reset(const MDPGUIConfig &config);
+    
     void updateLinkInfo(const Link &link);
 
     std::map<int, Node>& getNodes()
@@ -87,11 +87,13 @@ public:
         return m_nodes;
     }
 
+    // Returns all links in the system
     std::map<std::pair<int, int>, Link>& getLinks()
     {
         return m_links;
     }
 
+    // Returns all vulnerabilities in the system
     std::map<std::string, Vulnerability>& getVulnerabilities()
     {
         return m_vulnerabilities;

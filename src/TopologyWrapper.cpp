@@ -11,7 +11,7 @@
 using json = nlohmann::json;
 
 
-
+// Get a string that represents the state of a vulnerability, including highlighting
 std::string TopologyWrapper::Link::VulInstance::getString() const
 {
     std::stringstream ss;
@@ -40,6 +40,7 @@ std::string TopologyWrapper::Link::VulInstance::getString() const
     return ss.str();
 }
 
+// Get a string representing the current state of the vulnerabilities on the link
 std::string TopologyWrapper::Link::getVulString(vulnerability_state state) const
 {
     std::string vulString;
@@ -55,6 +56,7 @@ std::string TopologyWrapper::Link::getVulString(vulnerability_state state) const
     return vulString;
 }
 
+// Update the info pane with the current vulnerability information of the link
 void TopologyWrapper::updateLinkInfo(const Link &link)
 {
     m_netWindow.m_nettop->setLinkInfoParameter(link.m_endIds.first, link.m_endIds.second,
@@ -66,59 +68,36 @@ void TopologyWrapper::updateLinkInfo(const Link &link)
 }
 
 
-
+// Will exit if the file is invalid
 TopologyWrapper::TopologyWrapper(const sf::Vector2f &windowSize,
         const MDPGUIConfig &config,
         const std::vector<std::string> &defenderActions, int nodeWidth)
     :
         m_defenderActions(defenderActions)
 {
-    if (!m_netWindow.init(windowSize, config.networkFile, nodeWidth) ||
-            !init(windowSize, config, defenderActions, nodeWidth)) {
-        /* Could handle or prompt another file name */
+    if (!m_netWindow.init(windowSize, config.networkFile, nodeWidth)) {
+        // Could handle or prompt another file name
         PLOGF << "Bad file, exiting";
         exit(1);
     }
     
-    
-    /*
-    
-    for (std::map<int, std::set<int>>::iterator it = nodeLinks.begin();
-            it != nodeLinks.end(); it++) {
-        std::stringstream ss;
-        ss << "id: " << it->first << ", links: [";
-        for (std::set<int>::iterator iit = it->second.begin();
-                iit != it->second.end(); iit++) {
-            ss << *iit << ", ";
-        }
-        PLOGD << ss.str() << "]";
-        //(*it)["id"] << std::endl;
-    }
-    
-    PLOGD << "SIZE: " << nodeLinks.size();
-    
-    NetworkTopology *test = new NetworkTopology(nodeLinks, nodeWidth,
-            windowSize, layout);
-    //NetworkTopology *test = new NetworkTopology(numNodes, nodeWidth, windowSize);
-    for (std::list<std::reference_wrapper<Link>>::iterator it = test->m_links.begin();
-            it != test->m_links.end(); it++) {
-        PLOGD << "Link: " << it->get();
-    }
-    return test;*/
 }
 
-TopologyWrapper* TopologyWrapper::init(const sf::Vector2f &windowSize,
-        const MDPGUIConfig &config,
-        const std::vector<std::string> &defenderActions, int nodeWidth)
+// Load the network file and set up the state for the simulations
+bool TopologyWrapper::init(const MDPGUIConfig &config)
 {
     std::ifstream i(config.networkFile);
     json j;
     i >> j;
+
+    m_nodes.clear();
+    m_links.clear();
+    m_vulnerabilities.clear();
     
-    /* Load in the vulnerabilities present in the system over all links */
+    // Load in the vulnerabilities present in the system over all links
     if (!j.contains("systemVulnerabilities")) {
         PLOGE << "Does not contain required field \"systemVulnerabilities\"";
-        return nullptr;
+        return false;
     }
     PLOGI << "Vulnerabilities:";
     json sysVulnerabilities = j["systemVulnerabilities"];
@@ -126,7 +105,7 @@ TopologyWrapper* TopologyWrapper::init(const sf::Vector2f &windowSize,
             v != sysVulnerabilities.end(); v++) {
         if (!v->contains("cveID")) {
             PLOGE << "Does not contain required field \"cveID\"";
-            return nullptr;
+            return false;
         }
         PLOGI << " CVE ID: " << (*v)["cveID"];
         Vulnerability &vul = m_vulnerabilities[(*v)["cveID"]];
@@ -152,23 +131,22 @@ TopologyWrapper* TopologyWrapper::init(const sf::Vector2f &windowSize,
             vul.exploitability = (*v)["exploitability"];
     }
     
-    /* Load in all the nodes, and each outgoing link, along with the
-     * vulnerability instances on these links */
+    // Load in all the nodes, and each outgoing link, along with the
+    // vulnerability instances on these links
     if (!j.contains("nodes")) {
         PLOGE << "Contains no nodes";
-        return nullptr;
+        return false;
     }
     PLOGI << "Nodes:";
     json nodes = j["nodes"];
     for (json::const_iterator n = nodes.begin(); n != nodes.end(); n++) {
-        /* Create the node based on the saved object */
+        // Create the node based on the saved object
         int nodeID = (*n)["id"];
         Node &node = m_nodes[nodeID];
         node.id = nodeID;
-        /* Need to add info for each node */
+        // Need to add info for each node
         m_netWindow.m_nettop->setNodeInfoTitle(nodeID,
                 "Node " + std::to_string(nodeID));
-        ///////////////
         if (!n->contains("links"))
             continue;
         PLOGI << "  Links:";
@@ -186,14 +164,14 @@ TopologyWrapper* TopologyWrapper::init(const sf::Vector2f &windowSize,
             
             m_netWindow.m_nettop->setLinkInfoParameter(nodeID, otherNodeID,
                     "Vulnerabilities", "");
-            if (li->contains("vulnerabilities")) {
+            if (li->contains("vulnerabilities") && !((*li)["vulnerabilities"].empty())) {
                 json vulnerabilities = (*li)["vulnerabilities"];
                 PLOGI << "   Vulnerabilities:";
                 for (json::const_iterator v = vulnerabilities.begin();
                         v != vulnerabilities.end(); v++) {
                     if (!(v->contains("cveID"))) {
                         PLOGE << "Vulnerability on link " << link.m_endIds << " does not contain required field \"cveID\"";
-                        return nullptr;
+                        return false;
                     }
                     std::string cveID = (*v)["cveID"];
                     PLOGI << "    cveID: \"" << cveID << "\"";
@@ -205,6 +183,12 @@ TopologyWrapper* TopologyWrapper::init(const sf::Vector2f &windowSize,
                     else
                         vul.m_state = vulnerable;
                 }
+            } else {
+                // If there are no vulnerabilities on a link then we don't include the link
+                m_netWindow.m_nettop->removeLink(nodeID, otherNodeID);
+                node.m_links.erase(otherNodeID);
+                m_links.erase(std::make_pair(nodeID, otherNodeID));
+                continue;
             }
             updateLinkInfo(link);
         }
@@ -212,7 +196,6 @@ TopologyWrapper* TopologyWrapper::init(const sf::Vector2f &windowSize,
         m_netWindow.m_nettop->setNodeInfoParameter(nodeID, "Num Links",
                 std::to_string(node.m_links.size()));
     }
-    m_netWindow.m_nettop->setNodeInfoParameter(0, "Test", "Testing");
 
     // Set up network colouring from config
     std::vector<int> nodeIds = m_netWindow.m_nettop->getNodeIds();
@@ -231,14 +214,27 @@ TopologyWrapper* TopologyWrapper::init(const sf::Vector2f &windowSize,
 
     m_netWindow.m_nettop->setColor(config.backgroundColor);
 
-    return this;
+    return true;
 }
 
+// Reset the whole system. Will exit if the file is invalid
+void TopologyWrapper::reset(const MDPGUIConfig &config)
+{
+    if (!init(config)) {
+        // Could handle or prompt another file name
+        PLOGF << "Bad file, exiting";
+        exit(1);
+    }
+}
+
+// Implementation of Renderable::Update
 void TopologyWrapper::update(sf::Event *event, const sf::Vector2f &windowSize,
         bool &clickedOn)
 {
     m_netWindow.update(event, windowSize, clickedOn);
 }
+
+// Implementation of Renderable::render
 void TopologyWrapper::render(sf::RenderWindow& window, const sf::Vector2f &windowSize)
 {
     m_netWindow.render(window, windowSize);

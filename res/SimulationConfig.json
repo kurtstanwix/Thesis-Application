@@ -7,8 +7,11 @@
     "attackerMoveColor": [255, 0, 0],
     "defenderMoveColor": [0, 255, 0],
     "goalColor": [0, 255, 0],
-    "networkFile": "fixedGridNetwork.json",
+    "networkFile": "Network1.json",
     "startNodeId": 8,
     "goalNodeId": 3,
-    "logLevel": 4
+    "defenderPolicy": 1,
+    "logLevel": 3,
+    "GUI": true,
+    "numSimulations": 10
 }

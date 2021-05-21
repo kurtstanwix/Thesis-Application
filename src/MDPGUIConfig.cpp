@@ -24,10 +24,15 @@
 
 #define DEFAULT_DEFENDER_POLICY goal
 
+#define DEFAULT_GUI true
+#define DEFAULT_NUM_SIMULATIONS 1
+
 #define DEFAULT_LOG_LEVEL plog::info
 
 using json = nlohmann::json;
 
+// Converts an array of either [r,g,b] or [r,g,b,a] values into the corresponding rgb colour.
+// Alpha defaults to opaque if no given a value
 sf::Color colorFromJSON(json &color)
 {
     if (color.size() == 3)
@@ -54,14 +59,18 @@ MDPGUIConfig::MDPGUIConfig()
         startNodeId(DEFAULT_START_NODE_ID),
         goalNodeId(DEFAULT_GOAL_NODE_ID),
         defenderPolicy(DEFAULT_DEFENDER_POLICY),
-        logLevel(DEFAULT_LOG_LEVEL)
+        logLevel(DEFAULT_LOG_LEVEL),
+        GUI(DEFAULT_GUI),
+        numSimulations(DEFAULT_NUM_SIMULATIONS)
 {}
 
+// Load the default configuration values
 MDPGUIConfig MDPGUIConfig::LoadConfig()
 {
     return MDPGUIConfig();
 }
 
+// Load the values from a provided configuration file
 MDPGUIConfig MDPGUIConfig::LoadConfig(const std::string &fileName)
 {
     MDPGUIConfig result;
@@ -192,40 +201,19 @@ MDPGUIConfig MDPGUIConfig::LoadConfig(const std::string &fileName)
         PLOGV << "No logLevel";
     }
     
-    /*
-    json nodes = j["nodes"];
-    std::map<int, std::set<int>> nodeLinks;
-    for (json::const_iterator it = nodes.begin(); it != nodes.end(); it++) {
-        if (nodeLinks.insert(std::pair<int, std::set<int>>(
-                (*it)["id"],
-                (*it)["links"])).second == false) {
-            // This was a duplicate node, bad file
-            return nullptr;
-        }
-        //(*it)["id"] << std::endl;
+    if (j.contains("GUI")) {
+        result.GUI = j["GUI"];
+        PLOGV << "Loaded GUI=" << result.GUI;
+    } else {
+        PLOGV << "No GUI";
     }
     
-    
-    for (std::map<int, std::set<int>>::iterator it = nodeLinks.begin();
-            it != nodeLinks.end(); it++) {
-        std::stringstream ss;
-        ss << "id: " << it->first << ", links: [";
-        for (std::set<int>::iterator iit = it->second.begin();
-                iit != it->second.end(); iit++) {
-            ss << *iit << ", ";
-        }
-        PLOGD << ss.str() << "]";
-        //(*it)["id"] << std::endl;
+    if (j.contains("numSimulations")) {
+        result.numSimulations = j["numSimulations"];
+        PLOGV << "Loaded numSimulations=" << result.numSimulations;
+    } else {
+        PLOGV << "No numSimulations";
     }
     
-    PLOGD << "SIZE: " << nodeLinks.size();
-    
-    NetworkTopology *test = new NetworkTopology(nodeLinks, nodeWidth,
-            windowSize, layout);
-    //NetworkTopology *test = new NetworkTopology(numNodes, nodeWidth, windowSize);
-    for (std::list<std::reference_wrapper<Link>>::iterator it = test->m_links.begin();
-            it != test->m_links.end(); it++) {
-        PLOGD << "Link: " << it->get();
-    }*/
     return result;
 }

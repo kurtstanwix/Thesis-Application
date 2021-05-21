@@ -2,7 +2,7 @@ Build
 build
 Debug
 Library
-GraphicsTest
+NetworkGUILibrary
 MDPGUI.txt
 MDPGUI1.mk
 POMDPGUI.mk

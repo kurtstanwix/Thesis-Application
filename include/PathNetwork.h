@@ -14,6 +14,7 @@
 
 #include "SimulationUnit.h"
 
+// Simulation unit to calculate the path an attacker will take and to simulate those actions
 class PathNetwork : public DecPOMDPDiscrete, public SimulationUnit
 {
 private:
@@ -23,8 +24,6 @@ private:
     Index m_johI;
     PlanningUnitDecPOMDPDiscrete *m_bfs;
     MDPPolicyIteration *m_mdpSolver;
-    SimulationDecPOMDPDiscrete *m_sim;
-    //TopologyWrapper &m_top;
     
     std::map<Index, int> m_stateNodeMapping;
     std::map<int, Index> m_nodeStateMapping;
@@ -50,13 +49,11 @@ public:
     PathNetwork(int startNodeId, int goalNodeId, const sf::Vector2f &windowSize);
     ~PathNetwork()
     {
-        delete m_sim;
         delete m_bfs;
         delete m_mdpSolver;
     }
 
     void reset();
-    void CreateSimulator();
     void PlanMDP();
     std::vector<int> GetPolicy();
     boost::shared_ptr<JointPolicyDiscrete>  GetJointPolicy();

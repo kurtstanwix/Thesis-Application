@@ -5,8 +5,6 @@
 
 class DefenderGoalPriority : public SimulationUnit
 {
-private:
-    //std::random_device m_random;
 public:
     void reset();
     void TakeAction();
